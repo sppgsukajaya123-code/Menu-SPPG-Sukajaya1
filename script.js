@@ -191,17 +191,20 @@ function tampilkanMenu(menu) {
   void namaElement.offsetWidth;
   namaElement.classList.add("data-in");
 
-  setText("energiBesar", ambilField(menu, "ENERGI BESAR"), " kkal");
-  setText("karboBesar", ambilField(menu, "KARBOHIDRAT BESAR"), " g");
-  setText("proteinBesar", ambilField(menu, "PROTEIN BESAR"), " g");
-  setText("lemakBesar", ambilField(menu, "LEMAK BESAR"), " g");
-  setText("seratBesar", ambilField(menu, "SERAT BESAR"), " g");
+  const porsiBesar = ambilField(menu, "PORSI BESAR") || {};
+  const porsiKecil = ambilField(menu, "PORSI KECIL") || {};
 
-  setText("energiKecil", ambilField(menu, "ENERGI KECIL"), " kkal");
-  setText("karboKecil", ambilField(menu, "KARBOHIDRAT KECIL"), " g");
-  setText("proteinKecil", ambilField(menu, "PROTEIN KECIL"), " g");
-  setText("lemakKecil", ambilField(menu, "LEMAK KECIL"), " g");
-  setText("seratKecil", ambilField(menu, "SERAT KECIL"), " g");
+  setText("energiBesar", ambilField(porsiBesar, "ENERGI"), " kkal");
+  setText("karboBesar", ambilField(porsiBesar, "KARBOHIDRAT"), " g");
+  setText("proteinBesar", ambilField(porsiBesar, "PROTEIN"), " g");
+  setText("lemakBesar", ambilField(porsiBesar, "LEMAK"), " g");
+  setText("seratBesar", ambilField(porsiBesar, "SERAT"), " g");
+
+  setText("energiKecil", ambilField(porsiKecil, "ENERGI"), " kkal");
+  setText("karboKecil", ambilField(porsiKecil, "KARBOHIDRAT"), " g");
+  setText("proteinKecil", ambilField(porsiKecil, "PROTEIN"), " g");
+  setText("lemakKecil", ambilField(porsiKecil, "LEMAK"), " g");
+  setText("seratKecil", ambilField(porsiKecil, "SERAT"), " g");
 
   tampilkanFoto(ambilField(menu, "FOTO"), nama);
 
@@ -347,17 +350,20 @@ function aktifkanScrollAnimation() {
 
 /* ===== ANIMASI ANGKA (count up) ===== */
 function animasikanAngka(menu) {
+  const porsiBesar = ambilField(menu, "PORSI BESAR") || {};
+  const porsiKecil = ambilField(menu, "PORSI KECIL") || {};
+
   const mapping = [
-    ["energiBesar", ambilField(menu, "ENERGI BESAR"), " kkal"],
-    ["karboBesar", ambilField(menu, "KARBOHIDRAT BESAR"), " g"],
-    ["proteinBesar", ambilField(menu, "PROTEIN BESAR"), " g"],
-    ["lemakBesar", ambilField(menu, "LEMAK BESAR"), " g"],
-    ["seratBesar", ambilField(menu, "SERAT BESAR"), " g"],
-    ["energiKecil", ambilField(menu, "ENERGI KECIL"), " kkal"],
-    ["karboKecil", ambilField(menu, "KARBOHIDRAT KECIL"), " g"],
-    ["proteinKecil", ambilField(menu, "PROTEIN KECIL"), " g"],
-    ["lemakKecil", ambilField(menu, "LEMAK KECIL"), " g"],
-    ["seratKecil", ambilField(menu, "SERAT KECIL"), " g"]
+    ["energiBesar", ambilField(porsiBesar, "ENERGI"), " kkal"],
+    ["karboBesar", ambilField(porsiBesar, "KARBOHIDRAT"), " g"],
+    ["proteinBesar", ambilField(porsiBesar, "PROTEIN"), " g"],
+    ["lemakBesar", ambilField(porsiBesar, "LEMAK"), " g"],
+    ["seratBesar", ambilField(porsiBesar, "SERAT"), " g"],
+    ["energiKecil", ambilField(porsiKecil, "ENERGI"), " kkal"],
+    ["karboKecil", ambilField(porsiKecil, "KARBOHIDRAT"), " g"],
+    ["proteinKecil", ambilField(porsiKecil, "PROTEIN"), " g"],
+    ["lemakKecil", ambilField(porsiKecil, "LEMAK"), " g"],
+    ["seratKecil", ambilField(porsiKecil, "SERAT"), " g"]
   ];
 
   mapping.forEach(([id, value, unit], index) => {
@@ -368,6 +374,11 @@ function animasikanAngka(menu) {
 function countNumber(id, value, unit) {
   const element = document.getElementById(id);
   if (!element) return;
+
+  if (value === null || value === undefined || String(value).trim() === "") {
+    element.textContent = "-";
+    return;
+  }
 
   const number = Number(String(value).replace(",", ".").trim());
   if (!Number.isFinite(number)) {
