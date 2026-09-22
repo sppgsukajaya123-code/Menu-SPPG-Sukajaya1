@@ -181,7 +181,7 @@ function tampilkanMenu(menu) {
     if (info) info.textContent = `Menu untuk hari ini belum diperbarui oleh tim SPPG. Menampilkan menu terakhir (${formatTanggal(menu.__tanggalDipakai)}).`;
   } else {
     if (labelTanggal) labelTanggal.textContent = "MENU HARI INI";
-    if (info) info.textContent = "Data menu dan kandungan gizi diperbarui oleh tim SPPG SUKAJAYA 1.";
+    if (info) info.textContent = "Data menu dan kandungan gizi diperbarui oleh tim SPPG BOGOR SUKAJAYA SUKAJAYA.";
   }
 
   const nama = ambilField(menu, "NAMA MENU");
