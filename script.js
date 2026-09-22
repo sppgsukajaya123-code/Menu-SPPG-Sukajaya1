@@ -9,11 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadingPercent = document.getElementById("loadingPercent");
 
   loadingInterval = setInterval(() => {
-    if (progress < 88) {
-      progress++;
-      loadingBar.style.width = progress + "%";
-      loadingPercent.textContent = progress + "%";
+    if (progress < 70) {
+      progress += 1;
+    } else if (progress < 95) {
+      progress += 0.25; // merayap pelan supaya tidak terlihat "macet" saat menunggu server
     }
+    const tampil = Math.min(Math.round(progress), 95);
+    loadingBar.style.width = tampil + "%";
+    loadingPercent.textContent = tampil + "%";
   }, 20);
 
   loadMenu();
@@ -43,7 +46,20 @@ async function loadMenu() {
 
 /* ===== AMBIL DATA API ===== */
 async function ambilDataMenu() {
-  const response = await fetch(API_URL, { method: "GET", cache: "no-store" });
+  const controller = new AbortController();
+  const batasWaktu = setTimeout(() => controller.abort(), 15000); // 15 detik
+
+  let response;
+  try {
+    response = await fetch(API_URL, { method: "GET", cache: "no-store", signal: controller.signal });
+  } catch (err) {
+    if (err.name === "AbortError") {
+      throw new Error("Server tidak merespons dalam 15 detik. Cek koneksi internet, lalu coba refresh.");
+    }
+    throw new Error("Gagal menghubungi Google Apps Script. Cek koneksi internet kamu.");
+  } finally {
+    clearTimeout(batasWaktu);
+  }
 
   if (!response.ok) {
     throw new Error("Gagal menghubungi Google Apps Script.");
